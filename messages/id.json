@@ -13,7 +13,8 @@
     "offline": "Tidak terhubung — perubahan belum terkirim",
     "roleTeacher": "Ruang guru",
     "roleStudent": "Ruang latihan siswa",
-    "brandLine": "Latihan konsep Godot di browser"
+    "brandLine": "Latihan konsep Godot di browser",
+    "loading": "Memuat…"
   },
   "landing": {
     "promise": "Latihan pengembangan game di laptopmu. Bangun game akhirmu bersama di Godot.",

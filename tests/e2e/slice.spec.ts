@@ -66,8 +66,12 @@ test("movement lesson end to end", async ({ browser }) => {
 
   // The stranger cannot open this lesson.
   const xp = await signIn(browser, stranger.email);
-  const denied = await xp.goto(lessonUrl);
-  expect(denied?.status()).toBe(404);
+  // Streaming (loading.tsx) sends 200 headers first; what matters is that the
+  // not-found screen renders and none of the lesson is shown.
+  await xp.goto(lessonUrl);
+  await expect(xp.getByText(/could not be found|404/).first()).toBeVisible();
+  await expect(xp.getByText("Koordinat dan gerakan")).toHaveCount(0);
+  await expect(xp.locator("canvas")).toHaveCount(0);
 
   await sp.getByRole("button", { name: "Kirim ke guru" }).click();
   await sp.getByRole("button", { name: "Ya, kirim" }).click();

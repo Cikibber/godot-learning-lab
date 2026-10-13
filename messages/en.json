@@ -13,7 +13,8 @@
     "offline": "Offline — changes not sent yet",
     "roleTeacher": "Teacher workspace",
     "roleStudent": "Student practice space",
-    "brandLine": "Practice Godot concepts in the browser"
+    "brandLine": "Practice Godot concepts in the browser",
+    "loading": "Loading…"
   },
   "landing": {
     "promise": "Practice game development on your laptop. Build your final game together in Godot.",
