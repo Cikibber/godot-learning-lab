@@ -11,3 +11,6 @@ test-results/
 supabase/.branches
 supabase/.temp
 .playwright-mcp/
+
+.vercel
+.env*

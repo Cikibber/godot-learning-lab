@@ -4,7 +4,7 @@
 //   npm run provision -- --role student --email s1@school.sch.id --name "Siswa 01"
 //
 // Default: sends a Supabase invitation email (the user sets their own password
-// via /auth/confirm → /account/password). `--password` creates a confirmed
+// via /auth/callback → /account/password). `--recover` sends a password-reset email. `--password` creates a confirmed
 // account directly and is refused unless the target is a local stack.
 // Requires SUPABASE_SECRET_KEY in the operator's environment only.
 import { createClient } from "@supabase/supabase-js";
@@ -17,6 +17,7 @@ const { values } = parseArgs({
     name: { type: "string" },
     password: { type: "string" },
     "set-role": { type: "boolean", default: false },
+    recover: { type: "boolean", default: false },
   },
 });
 
@@ -29,9 +30,9 @@ const fail = (m: string): never => {
 };
 
 if (!url || !secret) fail("NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY are required.");
-const role = values.role === "teacher" ? "teacher" : values.role === "student" ? "student" : fail("--role teacher|student");
+const role = values.recover ? "student" : values.role === "teacher" ? "teacher" : values.role === "student" ? "student" : fail("--role teacher|student");
 const email = values.email?.trim().toLowerCase() ?? fail("--email is required");
-const name = values.name?.trim() ?? fail("--name is required (a school-approved display name)");
+const name = values.recover ? "-" : values.name?.trim() ?? fail("--name is required (a school-approved display name)");
 if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) fail("invalid email");
 if (name.length < 1 || name.length > 60) fail("name must be 1-60 characters");
 
@@ -39,7 +40,11 @@ const isLocal = /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?/.test(url!);
 const admin = createClient(url!, secret!, { auth: { persistSession: false, autoRefreshToken: false } });
 const app_metadata = { role, display_name: name };
 
-if (values["set-role"]) {
+if (values.recover) {
+  const { error } = await admin.auth.resetPasswordForEmail(email, { redirectTo: `${site}/auth/callback` });
+  if (error) fail(error.message);
+  console.log(`recovery email sent to ${email}`);
+} else if (values["set-role"]) {
   // Change role/name of an existing user (e.g. promote a provisioned teacher).
   const { data } = await admin.auth.admin.listUsers({ perPage: 1000 });
   const user = data?.users.find((u) => u.email === email) ?? fail("user not found");
@@ -52,7 +57,7 @@ if (values["set-role"]) {
   if (error) fail(error.message);
   console.log(`created local ${role} ${email}`);
 } else {
-  const { data, error } = await admin.auth.admin.inviteUserByEmail(email, { redirectTo: `${site}/auth/confirm` });
+  const { data, error } = await admin.auth.admin.inviteUserByEmail(email, { redirectTo: `${site}/auth/callback` });
   if (error) fail(error.message);
   const invited = data.user ?? fail("invite returned no user");
   const { error: metaError } = await admin.auth.admin.updateUserById(invited.id, { app_metadata });
