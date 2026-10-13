@@ -1,49 +1,124 @@
 @import "tailwindcss";
 
+/*
+  Game Studio Workshop — one dark theme.
+  Token names are semantic; legacy names (ink, muted, line, brand, ok, warn,
+  bad) are kept so existing utilities follow the new palette.
+*/
 @theme {
-  --color-paper: #faf8f3;
-  --color-ink: #1f2430;
-  --color-muted: #5a606c;
-  --color-line: #d9d4c7;
-  --color-brand: #2457c5;
-  --color-brand-dark: #1a3f91;
-  --color-ok: #1d7a46;
-  --color-warn: #8a5a00;
-  --color-bad: #b42318;
+  --color-bg: #202522;
+  --color-recess: #191e1b;
+  --color-panel: #2a312c;
+  --color-raised: #343d35;
+  --color-ink: #f0ebdd;          /* main text (warm ivory) */
+  --color-muted: #b8bbae;        /* secondary text: 6.8:1 on panel */
+  --color-line: #46524a;         /* hairline borders */
+  --color-line-strong: #5d6b60;
+  --color-brand: #a8ba8a;        /* sage: selection + primary action */
+  --color-brand-dark: #93a774;
+  --color-on-brand: #17201a;     /* text on sage fills: 9.6:1 */
+  --color-warn: #d0aa65;         /* ochre: attention, milestones */
+  --color-ok: #b9cf8f;           /* accepted (always with ✓ + label) */
+  --color-info: #9db8c7;         /* submitted / awaiting review */
+  --color-bad: #e49a87;          /* terracotta: errors, revision */
+  --color-paper: #202522;
+
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
-  --font-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --font-display: "Bahnschrift", "DIN Alternate", "Barlow Semi Condensed", "Roboto Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Cascadia Code", Consolas, "SFMono-Regular", monospace;
+
+  --radius-tool: 3px;
+  --radius-panel: 6px;
 }
 
-html { background: var(--color-paper); color: var(--color-ink); }
-body { font-family: var(--font-sans); line-height: 1.55; }
+html {
+  color-scheme: dark;
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+body {
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  background: var(--color-bg);
+}
 fieldset { min-width: 0; }
+::selection { background: var(--color-brand); color: var(--color-on-brand); }
 
-:focus-visible { outline: 3px solid var(--color-brand); outline-offset: 2px; }
+:focus-visible {
+  outline: 2px solid var(--color-warn);
+  outline-offset: 2px;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 
 @layer components {
-  .btn { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-ink/20 bg-white px-4 py-2 text-sm font-semibold text-ink hover:bg-ink/5 disabled:cursor-not-allowed disabled:opacity-50; }
-  .btn-primary { @apply border-brand bg-brand text-white hover:bg-brand-dark; }
-  .btn-danger { @apply border-bad text-bad; }
+  /* Headings: one distinctive treatment, semi-condensed workshop lettering. */
+  .h1, .h2, .h3, .display {
+    font-family: var(--font-display);
+    font-stretch: 87.5%;
+    letter-spacing: 0.005em;
+    color: var(--color-ink);
+  }
+  .display { @apply text-4xl leading-[1.05] font-semibold sm:text-5xl; }
+  .h1 { @apply text-2xl leading-tight font-semibold sm:text-[2rem]; }
+  .h2 { @apply text-xl leading-snug font-semibold; }
+  .h3 { @apply text-base leading-snug font-semibold; }
+
+  /* Actions: primary (sage fill) > secondary (outline) > quiet (text) ; danger. */
+  .btn {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-[3px] border border-line-strong bg-raised px-4 py-2 text-sm font-semibold text-ink
+      transition-colors hover:border-muted hover:bg-[#3c463e] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary { @apply border-brand bg-brand text-on-brand hover:border-brand-dark hover:bg-brand-dark; }
+  .btn-quiet { @apply border-transparent bg-transparent text-muted hover:border-line hover:bg-raised hover:text-ink; }
+  .btn-danger { @apply border-bad/60 bg-transparent text-bad hover:border-bad hover:bg-bad/10; }
   .btn-sm { @apply min-h-9 px-3 py-1; }
-  .card { @apply rounded-lg border border-line bg-white p-4 sm:p-5; }
-  .field { @apply block w-full rounded-md border border-ink/30 bg-white px-3 py-2 text-base text-ink; }
-  .label { @apply mb-1 block text-sm font-semibold; }
+
+  /* Surfaces */
+  .card { @apply rounded-[6px] border border-line bg-panel p-4 sm:p-5; }
+  .panel { @apply overflow-hidden rounded-[3px] border border-line bg-panel; }
+  .panel-head {
+    @apply flex min-h-9 items-center justify-between gap-2 border-b border-line bg-recess px-3 py-1.5 text-sm font-semibold text-muted;
+    font-family: var(--font-display);
+    font-stretch: 87.5%;
+  }
+  .panel-body { @apply p-3 sm:p-4; }
+  .recess { @apply rounded-[3px] border border-line bg-recess; }
+
+  /* Forms */
+  .field {
+    @apply block w-full rounded-[3px] border border-line-strong bg-recess px-3 py-2 text-base text-ink placeholder:text-muted/70;
+  }
+  .field:disabled { @apply opacity-60; }
+  .label { @apply mb-1 block text-sm font-semibold text-ink; }
   .hint { @apply mt-1 text-sm text-muted; }
   .error { @apply mt-1 text-sm font-semibold text-bad; }
-  .h1 { @apply text-2xl font-bold tracking-tight sm:text-3xl; }
-  .h2 { @apply text-xl font-bold; }
-  .h3 { @apply text-base font-bold; }
-  .link { @apply font-semibold text-brand underline underline-offset-2 hover:text-brand-dark; }
-  .prose-lesson p, .prose-lesson li { @apply max-w-prose; }
-  code { @apply rounded bg-ink/5 px-1 font-mono text-[0.92em]; }
-  pre code { @apply bg-transparent p-0; }
+  input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color: var(--color-brand); }
+
+  .link { @apply font-semibold text-brand underline decoration-brand/50 underline-offset-[3px] hover:decoration-brand; }
+
+  /* Module plate: numbered workshop label used for curriculum modules. */
+  .plate {
+    @apply inline-flex items-center gap-1 rounded-[2px] border border-warn/70 bg-recess px-1.5 py-0.5 text-xs font-semibold text-warn;
+    font-family: var(--font-mono);
+  }
+
+  .prose-lesson p, .prose-lesson li { @apply max-w-[68ch]; }
+  .meta { @apply text-sm text-muted; font-variant-numeric: tabular-nums; }
+
+  code { @apply rounded-[2px] bg-recess px-1 font-mono text-[0.92em] text-[#e4dcc4]; }
+  pre code { @apply bg-transparent p-0 text-inherit; }
+  .codeblock { @apply overflow-x-auto rounded-[3px] border border-line bg-recess p-3 font-mono text-sm leading-relaxed text-ink; }
+  kbd { @apply rounded-[2px] border border-line-strong bg-raised px-1 font-mono text-xs; }
+
+  table th { @apply text-muted; }
 }
 
 @media print {
+  html, body { background: #fff; color: #000; }
   header, nav, .no-print { display: none !important; }
-  .card { border: 1px solid #999; break-inside: avoid; }
+  .card, .panel { border: 1px solid #999; background: #fff; color: #000; break-inside: avoid; }
+  .h1, .h2, .h3, th, td, p, li { color: #000 !important; }
 }

@@ -8,8 +8,9 @@ export function JoinClassForm() {
   const t = useTranslations("student.join");
   const [state, action] = useActionState<ActionResult, FormData>(redeemCode, null);
   return (
-    <form action={action} className="card space-y-3">
-      <h2 className="h2">{t("title")}</h2>
+    <form action={action} className="panel" aria-labelledby="join-h">
+      <h2 id="join-h" className="panel-head">{t("title")}</h2>
+      <div className="panel-body space-y-3">
       <div>
         <label className="label" htmlFor="code">{t("label")}</label>
         <input id="code" name="code" className="field font-mono uppercase tracking-widest" maxLength={20} autoComplete="off" required aria-describedby="code-help code-msg" />
@@ -18,7 +19,8 @@ export function JoinClassForm() {
       <p id="code-msg" role="status" className={state?.ok ? "font-semibold text-ok" : "error"}>
         {state?.ok ? t("sent") : state?.error ? t("failed") : ""}
       </p>
-      <SubmitButton>{t("submit")}</SubmitButton>
+      <SubmitButton className="btn w-full">{t("submit")}</SubmitButton>
+      </div>
     </form>
   );
 }

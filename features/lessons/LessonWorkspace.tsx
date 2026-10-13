@@ -97,98 +97,127 @@ export function LessonWorkspace(props: {
   const allPassed = results?.every((r) => r.passed) ?? false;
   const err = (f: string) => fieldErrors.includes(f);
 
+  const passedCount = results?.filter((r) => r.passed).length ?? 0;
+  const SAVE_MARK: Record<string, { mark: string; cls: string }> = {
+    idle: { mark: "○", cls: "text-muted" },
+    dirty: { mark: "●", cls: "text-warn" },
+    saving: { mark: "…", cls: "text-muted" },
+    saved: { mark: "✓", cls: "text-ok" },
+    failed: { mark: "!", cls: "text-bad" },
+    conflict: { mark: "⇄", cls: "text-bad" },
+    closed: { mark: "■", cls: "text-bad" },
+  };
+  const sm = SAVE_MARK[save];
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {restorable && (
-        <div role="status" className="flex flex-wrap items-center gap-3 rounded-md border border-warn/40 bg-warn/10 p-3">
+        <div role="status" className="flex flex-wrap items-center gap-3 rounded-[3px] border border-warn/60 bg-warn/[0.07] p-3">
           <span>{ts("restorable")}</span>
           <button type="button" className="btn btn-sm" onClick={() => { auto.update(restorable); setRestorable(null); }}>{ts("restore")}</button>
-          <button type="button" className="btn btn-sm" onClick={() => { clearLocalDraft(userId, scope); setRestorable(null); }}>{ts("discard")}</button>
+          <button type="button" className="btn btn-sm btn-quiet" onClick={() => { clearLocalDraft(userId, scope); setRestorable(null); }}>{ts("discard")}</button>
         </div>
       )}
 
-      {lesson.kind === "scene" ? (
-        <SceneComposer config={config as ConfigOf<"scene">} onConfig={(c) => patch({ config: c })} onSummary={(sm) => patch({ summary: sm })} readOnly={!canWork} />
-      ) : (
-        <ActivityHost config={config} onConfig={(c) => patch({ config: c })} onSummary={(sm) => patch({ summary: sm })} readOnly={!canWork} mode={mode} onMode={(m) => patch({ mode: m })} />
-      )}
-
-      <section aria-labelledby="checks-h" className="card space-y-2">
-        <h3 id="checks-h" className="h3">{t("checks")}</h3>
-        {!results ? (
-          <p className="text-muted">{t("checksNotRun")}</p>
+      <div className="space-y-px">
+        {lesson.kind === "scene" ? (
+          <SceneComposer config={config as ConfigOf<"scene">} onConfig={(c) => patch({ config: c })} onSummary={(s) => patch({ summary: s })} readOnly={!canWork} />
         ) : (
-          <ul className="space-y-1" aria-live="polite">
-            {results.map((r) => (
-              <li key={r.id} className={r.passed ? "text-ok" : "text-bad"}>
-                <span aria-hidden="true">{r.passed ? "✓ " : "✕ "}</span>
-                <span className="sr-only">{r.passed ? t("passed") : t("notYet")}: </span>
-                {lesson.checkLabels[r.id][locale]}
-              </li>
-            ))}
-          </ul>
+          <ActivityHost config={config} onConfig={(c) => patch({ config: c })} onSummary={(s) => patch({ summary: s })} readOnly={!canWork} mode={mode} onMode={(m) => patch({ mode: m })} />
         )}
-        {allPassed && <p className="rounded-md bg-brand/5 p-2 text-sm">{t("practicePassedNote")}</p>}
-        <details>
-          <summary className="cursor-pointer text-sm font-semibold">{t("hints")}</summary>
-          <ul className="mt-2 list-disc space-y-1 pl-6 text-sm">{lesson.activity.hints.map((h, i) => <li key={i}>{h[locale]}</li>)}</ul>
-        </details>
-      </section>
 
-      <section aria-labelledby="answers-h" className="card space-y-4">
-        <h3 id="answers-h" className="h3">{t("yourAnswers")}</h3>
-        <fieldset aria-describedby={err("quiz") ? "quiz-err" : undefined}>
-          <legend className="label">{lesson.quiz.prompt[locale]}</legend>
-          {lesson.quiz.code && <pre tabIndex={0} className="mb-2 overflow-x-auto rounded-md bg-[#1f2430] p-3 text-sm text-[#f4f1ea]"><code>{lesson.quiz.code}</code></pre>}
-          <div className="space-y-1">
+        <section aria-labelledby="checks-h" className="mt-3 overflow-hidden rounded-[3px] border border-line bg-panel">
+          <div className="panel-head">
+            <h3 id="checks-h">{t("checks")}</h3>
+            {results && <span className="font-mono text-xs">{passedCount}/{results.length}</span>}
+          </div>
+          <div className="panel-body space-y-3">
+            {!results ? (
+              <p className="text-sm text-muted">{t("checksNotRun")}</p>
+            ) : (
+              <ul className="space-y-1.5" aria-live="polite">
+                {results.map((r) => (
+                  <li key={r.id} className="flex gap-2.5 text-sm">
+                    <span aria-hidden="true" className={`grid size-5 shrink-0 place-items-center rounded-[2px] border font-mono text-xs ${r.passed ? "border-ok/70 text-ok" : "border-line-strong text-muted"}`}>{r.passed ? "✓" : "·"}</span>
+                    <span className="sr-only">{r.passed ? t("passed") : t("notYet")}: </span>
+                    <span className={r.passed ? "text-ink" : "text-muted"}>{lesson.checkLabels[r.id][locale]}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {allPassed && (
+              <p className="rounded-[3px] border border-info/50 bg-info/[0.07] p-2.5 text-sm">
+                <span aria-hidden="true" className="mr-1.5 font-mono text-info">◆</span>{t("practicePassedNote")}
+              </p>
+            )}
+            <details className="text-sm">
+              <summary className="cursor-pointer font-semibold text-muted hover:text-ink">{t("hints")}</summary>
+              <ul className="mt-2 list-disc space-y-1 pl-6 text-ink/90">{lesson.activity.hints.map((h, i) => <li key={i}>{h[locale]}</li>)}</ul>
+            </details>
+          </div>
+        </section>
+      </div>
+
+      <section id="explain" aria-labelledby="answers-h" className="scroll-mt-16 space-y-6">
+        <h3 id="answers-h" className="h2">{t("yourAnswers")}</h3>
+        <fieldset className="space-y-2" aria-describedby={err("quiz") ? "quiz-err" : undefined}>
+          <legend className="label mb-2 max-w-[68ch]">{lesson.quiz.prompt[locale]}</legend>
+          {lesson.quiz.code && <pre tabIndex={0} className="codeblock mb-2 max-w-[80ch]"><code>{lesson.quiz.code}</code></pre>}
+          <div className="max-w-[68ch] space-y-1.5">
             {lesson.quiz.options.map((o, i) => (
-              <label key={i} className="flex min-h-11 items-center gap-2">
-                <input type="radio" name="quiz" className="size-5" checked={answers.quiz === i} disabled={!canWork} onChange={() => patch({ answers: { ...answers, quiz: i } })} />
+              <label key={i} className={`flex min-h-11 items-center gap-3 rounded-[3px] border px-3 py-2 ${answers.quiz === i ? "border-brand bg-brand/[0.08]" : "border-line hover:border-line-strong"}`}>
+                <input type="radio" name="quiz" className="size-4 shrink-0" checked={answers.quiz === i} disabled={!canWork} onChange={() => patch({ answers: { ...answers, quiz: i } })} />
                 <span className="font-mono text-sm [overflow-wrap:anywhere]">{o[locale]}</span>
               </label>
             ))}
           </div>
           {err("quiz") && <p id="quiz-err" className="error">{t("errQuiz")}</p>}
         </fieldset>
-        <div>
-          <label className="label" htmlFor="reflection">{t("reflection")}</label>
-          <p className="hint" id="reflection-q">{lesson.reflection[locale]}</p>
-          <textarea id="reflection" className="field min-h-28" maxLength={1500} disabled={!canWork} value={answers.reflection}
-            aria-describedby={`reflection-q${err("reflection") ? " reflection-err" : ""}`} aria-invalid={err("reflection")}
-            onChange={(e) => patch({ answers: { ...answers, reflection: e.target.value } })} />
-          {err("reflection") && <p id="reflection-err" className="error">{t("errText")}</p>}
-        </div>
-        <div>
-          <label className="label" htmlFor="transfer">{t("transferAnswer")}</label>
-          <p className="hint" id="transfer-q">{lesson.transfer.question[locale]}</p>
-          <textarea id="transfer" className="field min-h-28" maxLength={1500} disabled={!canWork} value={answers.transfer}
-            aria-describedby={`transfer-q${err("transfer") ? " transfer-err" : ""}`} aria-invalid={err("transfer")}
-            onChange={(e) => patch({ answers: { ...answers, transfer: e.target.value } })} />
-          {err("transfer") && <p id="transfer-err" className="error">{t("errText")}</p>}
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div>
+            <label className="label" htmlFor="reflection">{t("reflection")}</label>
+            <p className="hint mb-2" id="reflection-q">{lesson.reflection[locale]}</p>
+            <textarea id="reflection" className="field min-h-32" maxLength={1500} disabled={!canWork} value={answers.reflection}
+              aria-describedby={`reflection-q${err("reflection") ? " reflection-err" : ""}`} aria-invalid={err("reflection")}
+              onChange={(e) => patch({ answers: { ...answers, reflection: e.target.value } })} />
+            {err("reflection") && <p id="reflection-err" className="error">{t("errText")}</p>}
+          </div>
+          <div>
+            <label className="label" htmlFor="transfer">{t("transferAnswer")}</label>
+            <p className="hint mb-2" id="transfer-q">{lesson.transfer.question[locale]}</p>
+            <textarea id="transfer" className="field min-h-32" maxLength={1500} disabled={!canWork} value={answers.transfer}
+              aria-describedby={`transfer-q${err("transfer") ? " transfer-err" : ""}`} aria-invalid={err("transfer")}
+              onChange={(e) => patch({ answers: { ...answers, transfer: e.target.value } })} />
+            {err("transfer") && <p id="transfer-err" className="error">{t("errText")}</p>}
+          </div>
         </div>
         {err("invalid") && <p role="alert" className="error">{t("errInvalid")}</p>}
       </section>
 
       {canWork && (
-        <div className="card sticky bottom-2 z-10 flex flex-wrap items-center justify-between gap-3 shadow-sm">
-          <p role="status" aria-live="polite" className={`text-sm font-semibold ${save === "failed" || save === "conflict" || save === "closed" ? "text-bad" : save === "saved" ? "text-ok" : "text-muted"}`}>
-            {ts(save)}
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {save === "conflict" && <button type="button" className="btn btn-sm" onClick={() => { window.location.reload(); }}>{ts("reloadLatest")}</button>}
-            {save === "failed" && <button type="button" className="btn btn-sm" onClick={auto.retry}>{ts("retry")}</button>}
-            <button type="button" className="btn" disabled={save === "saving" || save === "closed"} onClick={() => void auto.persist()}>{ts("saveNow")}</button>
-            {!confirming ? (
-              <button type="button" className="btn btn-primary" disabled={!summary || save === "closed"} onClick={() => setConfirming(true)}>{t("submit")}</button>
-            ) : (
-              <span className="flex flex-wrap items-center gap-2" role="group" aria-label={t("confirmSubmit")}>
-                <span className="text-sm">{t("confirmSubmit")}</span>
-                <button type="button" className="btn btn-primary" disabled={submitting} onClick={() => void submit()}>{submitting ? t("submitting") : t("confirm")}</button>
-                <button type="button" className="btn" onClick={() => setConfirming(false)}>{t("cancel")}</button>
-              </span>
-            )}
+        <div className="-mx-4 border-t border-line-strong bg-recess px-4 py-3 sm:sticky sm:bottom-0 sm:z-10 sm:mx-0 sm:rounded-[3px] sm:border">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p role="status" aria-live="polite" className={`flex items-center gap-2 text-sm font-semibold ${sm.cls}`}>
+              <span aria-hidden="true" className="font-mono">{sm.mark}</span>
+              {ts(save)}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {save === "conflict" && <button type="button" className="btn btn-sm" onClick={() => { window.location.reload(); }}>{ts("reloadLatest")}</button>}
+              {save === "failed" && <button type="button" className="btn btn-sm" onClick={auto.retry}>{ts("retry")}</button>}
+              <button type="button" className="btn" disabled={save === "saving" || save === "closed"} onClick={() => void auto.persist()}>{ts("saveNow")}</button>
+              {!confirming && (
+                <button type="button" className="btn btn-primary" disabled={!summary || save === "closed"} onClick={() => setConfirming(true)}>{t("submit")}</button>
+              )}
+            </div>
           </div>
-          {!summary && <p className="hint w-full">{t("runChecksFirst")}</p>}
+          {confirming && (
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-line pt-3" role="group" aria-label={t("confirmSubmit")}>
+              <span className="mr-auto text-sm">{t("confirmSubmit")}</span>
+              <button type="button" className="btn btn-quiet" onClick={() => setConfirming(false)}>{t("cancel")}</button>
+              <button type="button" className="btn btn-primary" disabled={submitting} onClick={() => void submit()}>{submitting ? t("submitting") : t("confirm")}</button>
+            </div>
+          )}
+          {!summary && <p className="hint">{t("runChecksFirst")}</p>}
         </div>
       )}
     </div>

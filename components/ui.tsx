@@ -28,9 +28,9 @@ export function Blocks({ blocks, locale }: { blocks: Block[]; locale: Locale }) 
             return <CodeBlock key={i} code={b.code} caption={b.caption[locale]} />;
           case "callout":
             return (
-              <p key={i} className={`rounded-md border p-3 ${b.tone === "warning" ? "border-warn/40 bg-warn/10" : "border-brand/40 bg-brand/5"}`}>
-                <span aria-hidden="true">{b.tone === "warning" ? "⚠ " : "💡 "}</span>
-                <RichText text={b.text[locale]} />
+              <p key={i} className={`flex max-w-[68ch] gap-3 rounded-[3px] border p-3 ${b.tone === "warning" ? "border-warn/50 bg-warn/[0.07]" : "border-line-strong bg-raised"}`}>
+                <span aria-hidden="true" className={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-[2px] font-mono text-xs font-bold ${b.tone === "warning" ? "bg-warn text-on-brand" : "bg-brand text-on-brand"}`}>{b.tone === "warning" ? "!" : "i"}</span>
+                <span><RichText text={b.text[locale]} /></span>
               </p>
             );
         }
@@ -41,38 +41,42 @@ export function Blocks({ blocks, locale }: { blocks: Block[]; locale: Locale }) 
 
 export function CodeBlock({ code, caption }: { code: string; caption?: string }) {
   return (
-    <figure>
-      <pre className="overflow-x-auto rounded-md bg-[#1f2430] p-3 text-sm leading-relaxed text-[#f4f1ea]" tabIndex={0}>
+    <figure className="max-w-[80ch] overflow-hidden rounded-[3px] border border-line">
+      <div className="flex items-center justify-between border-b border-line bg-raised px-3 py-1 font-mono text-xs text-muted">
+        <span>GDScript</span>
+        <span aria-hidden="true" className="flex gap-1"><span className="size-2 rounded-full bg-line-strong" /><span className="size-2 rounded-full bg-line-strong" /></span>
+      </div>
+      <pre className="overflow-x-auto bg-recess p-3 text-sm leading-relaxed text-ink" tabIndex={0}>
         <code className="language-gdscript" translate="no">{code}</code>
       </pre>
-      {caption && <figcaption className="hint">{caption}</figcaption>}
+      {caption && <figcaption className="border-t border-line bg-recess px-3 py-2 text-sm text-muted">{caption}</figcaption>}
     </figure>
   );
 }
 
 export type StatusKey = "not_started" | "draft" | "submitted" | "practice_passed" | "needs_revision" | "accepted" | "pending" | "approved" | "rejected" | "withdrawn" | "changes_requested";
 
+// Meaning is carried by symbol + label; colour only reinforces it.
 const STATUS_STYLE: Record<StatusKey, { icon: string; cls: string }> = {
-  not_started: { icon: "○", cls: "border-ink/30 text-muted" },
-  draft: { icon: "✎", cls: "border-warn text-warn" },
-  submitted: { icon: "↑", cls: "border-brand text-brand" },
-  practice_passed: { icon: "◆", cls: "border-brand text-brand" },
-  needs_revision: { icon: "↺", cls: "border-bad text-bad" },
-  accepted: { icon: "✓", cls: "border-ok text-ok" },
-  pending: { icon: "…", cls: "border-warn text-warn" },
-  approved: { icon: "✓", cls: "border-ok text-ok" },
-  rejected: { icon: "✕", cls: "border-bad text-bad" },
-  withdrawn: { icon: "–", cls: "border-ink/30 text-muted" },
-  changes_requested: { icon: "↺", cls: "border-bad text-bad" },
+  not_started: { icon: "○", cls: "border-line-strong text-muted" },
+  draft: { icon: "✎", cls: "border-dashed border-muted/70 text-ink" },
+  submitted: { icon: "↑", cls: "border-info/70 text-info" },
+  practice_passed: { icon: "◆", cls: "border-info/70 bg-info/10 text-info" },
+  needs_revision: { icon: "↺", cls: "border-bad/70 bg-bad/10 text-bad" },
+  accepted: { icon: "✓", cls: "border-ok/70 bg-ok/10 text-ok" },
+  pending: { icon: "…", cls: "border-warn/70 text-warn" },
+  approved: { icon: "✓", cls: "border-ok/70 bg-ok/10 text-ok" },
+  rejected: { icon: "✕", cls: "border-bad/70 text-bad" },
+  withdrawn: { icon: "–", cls: "border-line-strong text-muted" },
+  changes_requested: { icon: "↺", cls: "border-bad/70 bg-bad/10 text-bad" },
 };
-
 
 export async function StatusBadge({ status }: { status: StatusKey }) {
   const t = await getTranslations("status");
   const s = STATUS_STYLE[status];
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold ${s.cls}`}>
-      <span aria-hidden="true">{s.icon}</span>
+    <span className={`inline-flex shrink-0 items-center gap-1.5 rounded-[3px] border px-2 py-0.5 text-xs font-semibold whitespace-nowrap ${s.cls}`}>
+      <span aria-hidden="true" className="font-mono">{s.icon}</span>
       {t(status)}
     </span>
   );
@@ -81,11 +85,15 @@ export async function StatusBadge({ status }: { status: StatusKey }) {
 export function PageHeader({ title, subtitle, back, children }: { title: string; subtitle?: ReactNode; back?: { href: string; label: string }; children?: ReactNode }) {
   return (
     <div className="mb-6 space-y-2">
-      {back && <Link href={back.href} className="link text-sm">← {back.label}</Link>}
+      {back && (
+        <Link href={back.href} className="inline-flex items-center gap-1 text-sm text-muted hover:text-ink">
+          <span aria-hidden="true">‹</span> {back.label}
+        </Link>
+      )}
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
+        <div className="min-w-0">
           <h1 className="h1">{title}</h1>
-          {subtitle && <p className="text-muted">{subtitle}</p>}
+          {subtitle && <p className="mt-1 text-muted">{subtitle}</p>}
         </div>
         {children}
       </div>
@@ -94,7 +102,7 @@ export function PageHeader({ title, subtitle, back, children }: { title: string;
 }
 
 export function Empty({ children }: { children: ReactNode }) {
-  return <p className="rounded-md border border-dashed border-line p-4 text-muted">{children}</p>;
+  return <p className="rounded-[3px] border border-dashed border-line-strong bg-recess/60 px-4 py-3 text-muted">{children}</p>;
 }
 
 /** Formats an instant in the class timezone (not the server's). */
@@ -109,6 +117,12 @@ export function When({ iso, tz, locale }: { iso: string | null; tz: string; loca
 }
 
 export function Alert({ tone = "info", children }: { tone?: "info" | "ok" | "bad"; children: ReactNode }) {
-  const cls = tone === "ok" ? "border-ok/40 bg-ok/10" : tone === "bad" ? "border-bad/40 bg-bad/10" : "border-brand/40 bg-brand/5";
-  return <div role={tone === "bad" ? "alert" : "status"} className={`rounded-md border p-3 ${cls}`}>{children}</div>;
+  const cls = tone === "ok" ? "border-ok/50 bg-ok/[0.08]" : tone === "bad" ? "border-bad/60 bg-bad/[0.08]" : "border-line-strong bg-raised";
+  const mark = tone === "ok" ? "✓" : tone === "bad" ? "!" : "i";
+  return (
+    <div role={tone === "bad" ? "alert" : "status"} className={`flex gap-3 rounded-[3px] border p-3 ${cls}`}>
+      <span aria-hidden="true" className={`font-mono font-bold ${tone === "ok" ? "text-ok" : tone === "bad" ? "text-bad" : "text-muted"}`}>{mark}</span>
+      <div className="min-w-0">{children}</div>
+    </div>
+  );
 }

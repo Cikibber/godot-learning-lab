@@ -10,7 +10,10 @@
     "signOut": "Sign out",
     "language": "Language",
     "online": "Online",
-    "offline": "Offline — changes not sent yet"
+    "offline": "Offline — changes not sent yet",
+    "roleTeacher": "Teacher workspace",
+    "roleStudent": "Student practice space",
+    "brandLine": "Practice Godot concepts in the browser"
   },
   "landing": {
     "promise": "Practice game development on your laptop. Build your final game together in Godot.",
@@ -20,7 +23,8 @@
     "point3": "Teachers give feedback and form project teams.",
     "honest": "The practice here simulates Godot concepts; it is not Godot. Final games are built in the real Godot editor on school computers.",
     "cta": "Sign in with your school account",
-    "privacy": "Read the privacy notice"
+    "privacy": "Read the privacy notice",
+    "headline": "Practice game concepts in the browser. Build the real game in Godot."
   },
   "signIn": {
     "title": "Sign in",
@@ -29,7 +33,8 @@
     "submit": "Sign in",
     "pending": "Checking…",
     "help": "Accounts are created by the school. There is no public sign-up. Forgot your password? Ask your teacher or the school operator.",
-    "linkInvalid": "This invitation link is invalid or expired. Ask the school for a new link."
+    "linkInvalid": "This invitation link is invalid or expired. Ask the school for a new link.",
+    "subtitle": "Your school account"
   },
   "errors": {
     "signInFailed": "Email or password does not match.",
@@ -191,7 +196,11 @@
       "export_scores": "Scores CSV",
       "unarchive": "Unarchive class",
       "archive": "Archive class",
-      "archiveHelp": "Archived classes accept no new enrollments or work. Data is not deleted."
+      "archiveHelp": "Archived classes accept no new enrollments or work. Data is not deleted.",
+      "queue": "Work queue",
+      "queuePending": "join requests",
+      "queueReview": "submissions awaiting review",
+      "queueRevision": "assignments in revision"
     },
     "assignments": {
       "title": "Assignments",
@@ -380,6 +389,17 @@
       "p2": "Can't use a keyboard or touch screen? Choose \"Text/step mode\" — it counts the same.",
       "p3": "Work saves automatically. If you see \"Could not save\", keep the page open and press Retry.",
       "p4": "Account or password problems? Ask your teacher."
+    },
+    "subtitle": "One small step each lesson. Practice here, build the final game in Godot.",
+    "duration": "Duration",
+    "modulePlate": "Module {n}",
+    "surveyLabel": "Survey",
+    "sideLabel": "Classes and help",
+    "action": {
+      "start": "Start",
+      "continue": "Continue",
+      "revise": "Revise",
+      "view": "View"
     }
   },
   "lesson": {
@@ -423,7 +443,18 @@
     "submitting": "Submitting…",
     "confirm": "Yes, submit",
     "cancel": "Cancel",
-    "runChecksFirst": "Run the checks in the activity before submitting."
+    "runChecksFirst": "Run the checks in the activity before submitting.",
+    "nav": {
+      "label": "Lesson sections",
+      "learn": "Learn",
+      "practice": "Practice",
+      "explain": "Explain",
+      "transfer": "Transfer to Godot"
+    },
+    "noticeMore": "Results here are practice; real games are built in the Godot editor.",
+    "latestFeedback": "Latest teacher feedback",
+    "seeHistory": "See all submissions",
+    "transferWhere": "Do this on a school computer that runs Godot."
   },
   "activity": {
     "loading": "Loading activity…",
@@ -540,7 +571,11 @@
       "limit": "Maximum {max} nodes.",
       "predict": "Prediction",
       "predictHelp": "What is the global position of Player's Sprite2D? Work it out, then run the checks."
-    }
+    },
+    "viewport": "Viewport",
+    "transport": "Play controls",
+    "dock": "Activity panels",
+    "keysHelp": "Click the play area, then use arrows or WASD. The buttons on the left can be held with touch or mouse."
   },
   "survey": {
     "minutes": "~{min} minutes",

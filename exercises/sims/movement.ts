@@ -58,7 +58,7 @@ export function createMovementSim(initial: Cfg) {
     },
     render(ctx) {
       clear(ctx);
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = C.panel;
       ctx.fillRect(0, 0, WORLD_W, TOP - 6);
       ghosts.forEach((g, i) => {
         const y = 14 + i * 32;
@@ -66,7 +66,7 @@ export function createMovementSim(initial: Cfg) {
         box(ctx, { x: 64 + (g.x * (WORLD_W - 90)) / WORLD_W, y, w: 18, h: 18 }, i ? C.goal : C.coin);
       });
       text(ctx, cfg.useDelta ? "× delta" : "no delta", WORLD_W - 50, 40, cfg.useDelta ? C.goal : C.hazard, 12);
-      box(ctx, TARGET, "rgba(29,122,70,0.25)");
+      box(ctx, TARGET, "rgba(168,186,138,0.16)");
       outline(ctx, TARGET, C.goal, true);
       text(ctx, "TARGET", TARGET.x + TARGET.w / 2, TARGET.y - 10, C.goal, 11);
       box(ctx, player, C.player, "P");

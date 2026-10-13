@@ -51,6 +51,19 @@ export default async function ClassOverview({ params }: { params: Promise<{ id: 
       <PageHeader title={cls.name} subtitle={`${cls.term} · ${cls.timezone}${cls.archived_at ? ` · ${t("archived")}` : ""}`} back={{ href: "/teacher", label: t("back") }} />
       <ClassTabs classId={id} active="overview" />
 
+      <section aria-label={t("queue")} className="mb-8 grid gap-px overflow-hidden rounded-[3px] border border-line bg-line sm:grid-cols-3">
+        {[
+          { n: pending.length, label: t("queuePending"), href: "#invite-h", tone: pending.length ? "text-warn" : "text-muted" },
+          { n: rows.reduce((a, r) => a + r.awaiting, 0), label: t("queueReview"), href: `/teacher/classes/${id}/reviews`, tone: "text-info" },
+          { n: rows.reduce((a, r) => a + r.revision, 0), label: t("queueRevision"), href: `/teacher/classes/${id}/reviews?f=needs_revision`, tone: "text-bad" },
+        ].map((q) => (
+          <a key={q.label} href={q.href} className="flex items-baseline gap-3 bg-panel px-4 py-3 hover:bg-raised">
+            <span className={`font-mono text-2xl font-semibold tabular-nums ${q.n ? q.tone : "text-muted"}`}>{q.n}</span>
+            <span className="text-sm text-ink">{q.label}</span>
+          </a>
+        ))}
+      </section>
+
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="card space-y-3" aria-labelledby="invite-h">
           <h2 id="invite-h" className="h2">{t("enrollment")}</h2>
@@ -120,7 +133,7 @@ export default async function ClassOverview({ params }: { params: Promise<{ id: 
                     <td className="py-2 pr-3">{r.revision}</td>
                     <td className="py-2 pr-3">{surveys.length - r.surveysMissing}/{surveys.length}</td>
                     <td className="py-2">
-                      <form action={decideEnrollment.bind(null, id, r.id, "withdrawn")}><SubmitButton className="btn btn-sm">{t("withdraw")}</SubmitButton></form>
+                      <form action={decideEnrollment.bind(null, id, r.id, "withdrawn")}><SubmitButton className="btn btn-sm btn-quiet">{t("withdraw")}</SubmitButton></form>
                     </td>
                   </tr>
                 ))}
@@ -151,7 +164,7 @@ export default async function ClassOverview({ params }: { params: Promise<{ id: 
             {sessions.data?.map((s) => (
               <li key={s.id} className="flex items-center justify-between gap-2 py-2">
                 <span><span className="font-semibold">{s.label}</span>{s.notes && <span className="text-sm text-muted"> — {s.notes}</span>}</span>
-                <form action={removeSession.bind(null, id, s.id)}><SubmitButton className="btn btn-sm">{t("remove")}</SubmitButton></form>
+                <form action={removeSession.bind(null, id, s.id)}><SubmitButton className="btn btn-sm btn-quiet">{t("remove")}</SubmitButton></form>
               </li>
             ))}
           </ul>

@@ -11,8 +11,8 @@ function Slider({ label, value, min, max, step = 1, unit, onChange, disabled }: 
   const id = useId();
   return (
     <div>
-      <label className="label" htmlFor={id}>{label}: <output htmlFor={id}>{value}{unit}</output></label>
-      <input id={id} type="range" className="w-full accent-[#2457c5]" min={min} max={max} step={step} value={value} disabled={disabled} onChange={(e) => onChange(Number(e.target.value))} />
+      <label className="label" htmlFor={id}>{label}: <output htmlFor={id} className="font-mono text-brand">{value}{unit}</output></label>
+      <input id={id} type="range" className="w-full" min={min} max={max} step={step} value={value} disabled={disabled} onChange={(e) => onChange(Number(e.target.value))} />
     </div>
   );
 }

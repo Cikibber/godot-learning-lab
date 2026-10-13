@@ -10,7 +10,10 @@
     "signOut": "Keluar",
     "language": "Bahasa",
     "online": "Terhubung",
-    "offline": "Tidak terhubung — perubahan belum terkirim"
+    "offline": "Tidak terhubung — perubahan belum terkirim",
+    "roleTeacher": "Ruang guru",
+    "roleStudent": "Ruang latihan siswa",
+    "brandLine": "Latihan konsep Godot di browser"
   },
   "landing": {
     "promise": "Latihan pengembangan game di laptopmu. Bangun game akhirmu bersama di Godot.",
@@ -20,7 +23,8 @@
     "point3": "Guru memberi umpan balik dan membentuk tim proyek.",
     "honest": "Latihan di sini adalah simulasi konsep Godot, bukan Godot. Game akhir dibuat di editor Godot asli pada komputer sekolah.",
     "cta": "Masuk dengan akun sekolah",
-    "privacy": "Baca pemberitahuan privasi"
+    "privacy": "Baca pemberitahuan privasi",
+    "headline": "Latih konsep game di browser. Bangun game sungguhan di Godot."
   },
   "signIn": {
     "title": "Masuk",
@@ -29,7 +33,8 @@
     "submit": "Masuk",
     "pending": "Memeriksa…",
     "help": "Akun dibuat oleh sekolah. Tidak ada pendaftaran umum. Lupa kata sandi? Hubungi gurumu atau operator sekolah.",
-    "linkInvalid": "Tautan undangan tidak valid atau sudah kedaluwarsa. Minta tautan baru kepada sekolah."
+    "linkInvalid": "Tautan undangan tidak valid atau sudah kedaluwarsa. Minta tautan baru kepada sekolah.",
+    "subtitle": "Akun dari sekolahmu"
   },
   "errors": {
     "signInFailed": "Email atau kata sandi tidak cocok.",
@@ -191,7 +196,11 @@
       "export_scores": "CSV nilai",
       "unarchive": "Buka arsip kelas",
       "archive": "Arsipkan kelas",
-      "archiveHelp": "Kelas yang diarsipkan tidak menerima pendaftaran atau pekerjaan baru. Data tidak dihapus."
+      "archiveHelp": "Kelas yang diarsipkan tidak menerima pendaftaran atau pekerjaan baru. Data tidak dihapus.",
+      "queue": "Antrean kerja",
+      "queuePending": "permintaan bergabung",
+      "queueReview": "kiriman menunggu tinjauan",
+      "queueRevision": "tugas sedang direvisi"
     },
     "assignments": {
       "title": "Tugas",
@@ -380,6 +389,17 @@
       "p2": "Tidak bisa memakai keyboard atau layar sentuh? Pilih \"Mode teks/langkah\" — hasilnya setara.",
       "p3": "Pekerjaan tersimpan otomatis. Jika muncul \"Gagal menyimpan\", jangan tutup halaman dan tekan Coba lagi.",
       "p4": "Masalah akun atau kata sandi? Hubungi gurumu."
+    },
+    "subtitle": "Satu langkah kecil setiap pertemuan. Latihan di sini, game akhir di Godot.",
+    "duration": "Durasi",
+    "modulePlate": "Modul {n}",
+    "surveyLabel": "Survei",
+    "sideLabel": "Kelas dan bantuan",
+    "action": {
+      "start": "Mulai",
+      "continue": "Lanjutkan",
+      "revise": "Revisi",
+      "view": "Lihat"
     }
   },
   "lesson": {
@@ -423,7 +443,18 @@
     "submitting": "Mengirim…",
     "confirm": "Ya, kirim",
     "cancel": "Batal",
-    "runChecksFirst": "Jalankan pemeriksaan di aktivitas sebelum mengirim."
+    "runChecksFirst": "Jalankan pemeriksaan di aktivitas sebelum mengirim.",
+    "nav": {
+      "label": "Bagian pelajaran",
+      "learn": "Pelajari",
+      "practice": "Praktik",
+      "explain": "Jelaskan",
+      "transfer": "Transfer ke Godot"
+    },
+    "noticeMore": "Hasil di sini adalah latihan; game sungguhan dibuat di editor Godot.",
+    "latestFeedback": "Umpan balik terbaru dari guru",
+    "seeHistory": "Lihat semua kiriman",
+    "transferWhere": "Kerjakan di komputer sekolah yang menjalankan Godot."
   },
   "activity": {
     "loading": "Memuat aktivitas…",
@@ -540,7 +571,11 @@
       "limit": "Maksimal {max} node.",
       "predict": "Prediksi",
       "predictHelp": "Berapa posisi global Sprite2D milik Player? Hitung dulu, lalu jalankan pemeriksaan."
-    }
+    },
+    "viewport": "Viewport",
+    "transport": "Kontrol permainan",
+    "dock": "Panel aktivitas",
+    "keysHelp": "Klik area permainan, lalu pakai panah atau WASD. Tombol di kiri bisa ditahan dengan sentuhan atau mouse."
   },
   "survey": {
     "minutes": "±{min} menit",

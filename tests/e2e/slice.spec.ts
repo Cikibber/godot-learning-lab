@@ -40,7 +40,7 @@ test("movement lesson end to end", async ({ browser }) => {
 
   // Student plays the activity in text/step mode (frame-rate independent).
   await sp.reload();
-  await sp.getByRole("link", { name: "Buka" }).click();
+  await sp.getByRole("link", { name: "Mulai", exact: true }).click();
   await expect(sp.getByText("Simulasi browser untuk konsep Godot. GDScript tidak dijalankan di sini.")).toBeVisible();
   const lessonUrl = sp.url();
   await sp.getByRole("button", { name: "Mode teks/langkah" }).click();
@@ -85,7 +85,7 @@ test("movement lesson end to end", async ({ browser }) => {
 
   // Student sees feedback and starts a revision; the first submission stays.
   await sp.reload();
-  await expect(sp.getByText("Bagus. Tambahkan contoh CharacterBody2D.")).toBeVisible();
+  await expect(sp.getByText("Bagus. Tambahkan contoh CharacterBody2D.").first()).toBeVisible();
   await expect(sp.getByText(/^.?Perlu revisi$/).first()).toBeVisible();
   await sp.getByRole("button", { name: "Mulai revisi" }).click();
   await expect(sp.getByRole("button", { name: "Simpan sekarang" })).toBeVisible();

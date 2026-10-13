@@ -21,6 +21,8 @@ export default function AuthCallback() {
     const access_token = params.get("access_token");
     const refresh_token = params.get("refresh_token");
     if (!access_token || !refresh_token) {
+      // The URL fragment is external state only readable after mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFailed(true);
       return;
     }

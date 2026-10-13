@@ -11,10 +11,10 @@ export function LocaleSwitcher() {
   const router = useRouter();
   const [pending, start] = useTransition();
   return (
-    <label className="flex items-center gap-2 text-sm">
-      <span>{t("language")}</span>
+    <label className="flex items-center gap-2 text-sm text-muted">
+      <span className="sr-only sm:not-sr-only">{t("language")}</span>
       <select
-        className="field w-auto py-1"
+        className="field w-auto min-h-9 py-1 text-sm"
         value={locale}
         disabled={pending}
         // refresh() re-renders server text in place: client drafts and the
@@ -32,7 +32,7 @@ export function SignOutButton() {
   const t = useTranslations("common");
   return (
     <form action={signOut} onSubmit={() => clearAllLocalDrafts()}>
-      <button type="submit" className="btn btn-sm">{t("signOut")}</button>
+      <button type="submit" className="btn btn-sm btn-quiet border-line">{t("signOut")}</button>
     </form>
   );
 }
@@ -51,8 +51,8 @@ export function ConnectionStatus() {
     };
   }, []);
   return (
-    <span role="status" className={`text-xs font-semibold ${online ? "text-ok" : "text-bad"}`}>
-      <span aria-hidden="true">{online ? "● " : "✕ "}</span>
+    <span role="status" className={`inline-flex items-center gap-1.5 text-xs font-semibold ${online ? "text-muted" : "text-bad"}`}>
+      <span aria-hidden="true" className={`size-2 rounded-full ${online ? "bg-brand" : "bg-bad"}`} />
       {online ? t("online") : t("offline")}
     </span>
   );

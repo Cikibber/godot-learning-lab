@@ -96,7 +96,7 @@ export function renderScene(ctx: CanvasRenderingContext2D, cfg: Cfg, selected: s
     else ctx.arc(px, py, 7, 0, Math.PI * 2);
     ctx.fill();
     if (n.id === selected) {
-      ctx.strokeStyle = C.hazard;
+      ctx.strokeStyle = C.select;
       ctx.lineWidth = 3;
       ctx.strokeRect(px - 11, py - 11, 22, 22);
       ctx.lineWidth = 1;

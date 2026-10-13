@@ -6,13 +6,13 @@ const TABS = ["overview", "assignments", "reviews", "surveys", "teams", "project
 export async function ClassTabs({ classId, active }: { classId: string; active: (typeof TABS)[number] }) {
   const t = await getTranslations("teacher.tabs");
   return (
-    <nav aria-label={t("label")} className="no-print mb-6 flex flex-wrap gap-2 border-b border-line pb-2">
+    <nav aria-label={t("label")} className="no-print -mx-4 mb-8 flex gap-1 overflow-x-auto border-b border-line px-4">
       {TABS.map((tab) => (
         <Link
           key={tab}
           href={`/teacher/classes/${classId}${tab === "overview" ? "" : `/${tab}`}`}
           aria-current={tab === active ? "page" : undefined}
-          className={`rounded-md px-3 py-2 text-sm font-semibold ${tab === active ? "bg-brand text-white" : "text-brand hover:bg-brand/10"}`}
+          className={`-mb-px shrink-0 border-b-2 px-3 py-2.5 text-sm font-semibold ${tab === active ? "border-brand text-ink" : "border-transparent text-muted hover:border-line-strong hover:text-ink"}`}
         >
           {t(tab)}
         </Link>

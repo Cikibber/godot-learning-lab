@@ -97,7 +97,7 @@ export function createSignalsSim(initial: Cfg) {
       if (!doorOpen) box(ctx, DOOR, C.door, "▮");
       else outline(ctx, DOOR, C.door, true);
       coins.forEach((c) => !c.taken && diamond(ctx, c.r, C.coin));
-      box(ctx, EXIT, "rgba(29,122,70,0.25)");
+      box(ctx, EXIT, "rgba(168,186,138,0.16)");
       outline(ctx, EXIT, C.goal);
       text(ctx, "EXIT", EXIT.x + 25, EXIT.y - 10, C.goal, 11);
       box(ctx, player, C.player, "P");

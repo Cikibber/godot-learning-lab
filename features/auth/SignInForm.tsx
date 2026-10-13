@@ -11,7 +11,7 @@ export function SignInForm() {
   const [state, action] = useActionState<FormState, FormData>(signIn, null);
   return (
     // A new sign-in on a shared computer must not see the previous user's drafts.
-    <form action={action} onSubmit={() => clearAllLocalDrafts()} className="card space-y-4" noValidate>
+    <form action={action} onSubmit={() => clearAllLocalDrafts()} className="card space-y-4 border-line-strong" noValidate>
       {state?.error && <p role="alert" className="error" id="signin-error">{te(state.error as "signInFailed")}</p>}
       <div>
         <label className="label" htmlFor="email">{t("email")}</label>
@@ -21,7 +21,7 @@ export function SignInForm() {
         <label className="label" htmlFor="password">{t("password")}</label>
         <input className="field" id="password" name="password" type="password" autoComplete="current-password" required />
       </div>
-      <SubmitButton pendingText={t("pending")}>{t("submit")}</SubmitButton>
+      <SubmitButton className="btn btn-primary w-full" pendingText={t("pending")}>{t("submit")}</SubmitButton>
     </form>
   );
 }

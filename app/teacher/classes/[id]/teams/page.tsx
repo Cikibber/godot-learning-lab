@@ -69,7 +69,7 @@ export default async function TeamsPage({ params, searchParams }: { params: Prom
                   {ms.map((m) => (
                     <li key={m.id} className="flex items-center justify-between gap-2 py-1">
                       {names.get(m.student_id)}
-                      <form action={removeMember.bind(null, id, m.id)}><SubmitButton className="btn btn-sm">{t("remove")}</SubmitButton></form>
+                      <form action={removeMember.bind(null, id, m.id)}><SubmitButton className="btn btn-sm btn-quiet">{t("remove")}</SubmitButton></form>
                     </li>
                   ))}
                 </ul>

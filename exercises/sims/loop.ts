@@ -102,7 +102,7 @@ export function createLoopSim(initial: Cfg) {
       clear(ctx);
       COINS.forEach((r, i) => !coins[i] && diamond(ctx, r, C.coin));
       hazards.forEach((h) => box(ctx, h, C.hazard, "!"));
-      if (exitOpen()) box(ctx, EXIT, "rgba(29,122,70,0.3)");
+      if (exitOpen()) box(ctx, EXIT, "rgba(168,186,138,0.2)");
       outline(ctx, EXIT, exitOpen() ? C.goal : C.muted, !exitOpen());
       text(ctx, exitOpen() ? "EXIT ✓" : "EXIT ✕", EXIT.x + 22, EXIT.y - 10, exitOpen() ? C.goal : C.muted, 11);
       ctx.globalAlpha = invulnerable > 0 && Math.floor(invulnerable * 10) % 2 ? 0.4 : 1;

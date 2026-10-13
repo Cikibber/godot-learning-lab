@@ -2,18 +2,22 @@
 // never depends on colour alone.
 import { WORLD_H, WORLD_W, type Rect } from "./core";
 
+// Matches the workshop palette in app/globals.css (CSS does not reach Canvas).
 export const C = {
-  bg: "#f4f1ea",
-  grid: "#e2ddd2",
-  ink: "#1f2430",
-  player: "#2457c5",
-  wall: "#6b6f7a",
-  water: "#2a8fbd",
-  goal: "#1d7a46",
-  coin: "#b7791f",
-  hazard: "#b42318",
-  door: "#7a4b1d",
-  muted: "#8a8f99",
+  bg: "#1c221e",
+  grid: "#283029",
+  panel: "#2a312c",
+  ink: "#f0ebdd",
+  onFill: "#17201a",
+  player: "#8fb3c9",
+  wall: "#727e74",
+  water: "#4f88a6",
+  goal: "#a8ba8a",
+  coin: "#d0aa65",
+  hazard: "#e49a87",
+  door: "#a8805a",
+  muted: "#7f897f",
+  select: "#d0aa65",
 };
 
 export function clear(ctx: CanvasRenderingContext2D) {
@@ -36,7 +40,11 @@ export function clear(ctx: CanvasRenderingContext2D) {
 export function box(ctx: CanvasRenderingContext2D, r: Rect, fill: string, label?: string) {
   ctx.fillStyle = fill;
   ctx.fillRect(r.x, r.y, r.w, r.h);
-  if (label) text(ctx, label, r.x + r.w / 2, r.y + r.h / 2, "#ffffff");
+  // Thin dark edge keeps shapes crisp against the grid.
+  ctx.strokeStyle = "rgba(0,0,0,0.45)";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1);
+  if (label) text(ctx, label, r.x + r.w / 2, r.y + r.h / 2, C.onFill);
 }
 
 export function outline(ctx: CanvasRenderingContext2D, r: Rect, stroke: string, dashed = false) {
@@ -77,7 +85,7 @@ export function text(ctx: CanvasRenderingContext2D, s: string, x: number, y: num
 }
 
 export function banner(ctx: CanvasRenderingContext2D, s: string, color: string) {
-  ctx.fillStyle = "rgba(255,255,255,0.88)";
+  ctx.fillStyle = "rgba(25,30,27,0.94)";
   ctx.fillRect(WORLD_W / 2 - 150, WORLD_H / 2 - 26, 300, 52);
   ctx.strokeStyle = color;
   ctx.lineWidth = 3;

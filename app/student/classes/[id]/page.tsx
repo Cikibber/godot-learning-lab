@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { isPast } from "@/lib/time";
 import { requireRole } from "@/lib/auth/session";
-import { itemHref, itemTitle, studentClassItems } from "@/lib/db/student";
-import { Empty, PageHeader, StatusBadge, When } from "@/components/ui";
+import { studentClassItems } from "@/lib/db/student";
+import { PathList } from "@/features/student/LearningPath";
+import { Empty, PageHeader } from "@/components/ui";
 import type { Locale } from "@/lib/validation/content";
 
 export default async function StudentClassPage({ params }: { params: Promise<{ id: string }> }) {
@@ -24,22 +24,7 @@ export default async function StudentClassPage({ params }: { params: Promise<{ i
       </PageHeader>
       <section aria-labelledby="assign-h" className="space-y-3">
         <h2 id="assign-h" className="h2">{t("assignments")}</h2>
-        {!items.length && <Empty>{t("none")}</Empty>}
-        <ul className="space-y-2">
-          {items.map((i) => (
-            <li key={i.id} className="card flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <Link className="link text-lg" href={itemHref(i)}>{itemTitle(i, locale)}</Link>
-                <p className="text-sm text-muted">
-                  {i.kind === "lesson" ? t("lesson") : t("survey")}
-                  {i.dueAt && <> · {t("due")} <When iso={i.dueAt} tz={cls.timezone} locale={locale} /></>}
-                  {isPast(i.closedAt) && <> · {t("closed")}</>}
-                </p>
-              </div>
-              <StatusBadge status={i.status} />
-            </li>
-          ))}
-        </ul>
+        {!items.length ? <Empty>{t("none")}</Empty> : <PathList items={items} timezone={cls.timezone} locale={locale} />}
       </section>
     </>
   );

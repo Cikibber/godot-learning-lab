@@ -75,11 +75,11 @@ test("all eight activities load, step, and run their checks", async ({ browser }
       await sp.getByRole("button", { name: "Jalankan pemeriksaan" }).click();
     } else {
       await sp.getByRole("button", { name: "Mode teks/langkah" }).click();
-      await sp.locator(".card button.btn-sm").first().click();
+      await sp.getByRole("button", { name: "Kiri 0,25 dtk" }).click();
       await expect(sp.locator("p[aria-live=polite].font-mono")).not.toBeEmpty();
       await sp.getByRole("button", { name: "Jalankan pemeriksaan" }).click();
     }
-    await expect(sp.locator("#checks-h + ul li").first(), `module ${i + 1}`).toBeVisible();
+    await expect(sp.locator("section[aria-labelledby=checks-h] li").first(), `module ${i + 1}`).toBeVisible();
   }
   expect(errors).toEqual([]);
 });
@@ -124,7 +124,7 @@ test("performance measurements (throttled: 5 Mbps / 150 ms, 4× CPU)", async ({ 
   await cdp.send("Network.setCacheDisabled", { cacheDisabled: false });
   await sp.goto(`/student/classes/${fx.classId}`);
   const w0 = Date.now();
-  await sp.getByRole("link", { name: /Koordinat dan gerakan/ }).click();
+  await sp.getByRole("link", { name: /Koordinat dan gerakan/ }).first().click();
   await sp.getByRole("button", { name: "Mulai" }).waitFor();
   const warm = Date.now() - w0;
 
